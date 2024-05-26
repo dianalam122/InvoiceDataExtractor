@@ -1,19 +1,33 @@
-import fitz
-
-
-# Extract text from first two pages of PDF
-def extract_text(sample_pdf):
-    pdf_doc = fitz.open(sample_pdf)
-    text = ""
-    for page_num in range(2):
-        page = pdf_doc[page_num]
-        text += page.get_text()
-
-    return text
+from extractText import extract_text, extract_text_from_image
+from parse import parse_text
 
 
 sample_pdf = "invoices/sample.pdf"
-print(extract_text(sample_pdf))
+
+pdf_text = extract_text(sample_pdf)
+# pdf_text = extract_text_from_image(sample_pdf)
+print(pdf_text)
+
+# parsed_text = parse_text(pdf_text)
 
 
-# Parse through text
+# need: 
+# extract directly from doc:
+#     location
+#     cps account
+#     kwh used (maybe do ccp too with user input)
+#     units (user input)
+#     cost per day
+#     billing date (store month separately)
+#     service end date
+#     service start date
+#     days on bill
+
+
+# other info:
+#     period: user input (or look into fgf period schedule)
+#     vendor account: user input
+#     invoice/reference number: format -> cps acount (no dash) - Month
+#     service period (service end - service start + 1)
+#         make note if different than "days on bill"
+
