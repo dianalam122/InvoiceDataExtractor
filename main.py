@@ -1,12 +1,35 @@
-from old.extractText import extract_text, extract_text_from_image
+from text_extract import process_image
 from parse import parse_text
+from pdf2image import convert_from_path
+import os
+
+sample_pdf = 'invoices/real.pdf'
+
+pages = convert_from_path(sample_pdf, first_page=1, last_page=1)  # Only extract the first page
+first_page_image = 'first_page.jpg'
+pages[0].save(first_page_image, 'JPEG')
+# process_image(first_page_image)
+
+# parse text for specifics
+first_page_text = process_image(first_page_image)
+parse_text(first_page_text)
+os.remove(first_page_image)
 
 
-sample_pdf = "invoices/sample.pdf"
 
-pdf_text = extract_text(sample_pdf)
-# pdf_text = extract_text_from_image(sample_pdf)
-print(pdf_text)
+
+#_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+# second page doc
+
+# pages = convert_from_path(sample_pdf, first_page=2, last_page=2)
+# second_page_image = 'second_page.jpg'
+# pages[0].save(second_page_image, 'JPEG')
+# process_image(second_page_image)
+# os.remove(second_page_image)
+
+
+
+
 
 # parsed_text = parse_text(pdf_text)
 
