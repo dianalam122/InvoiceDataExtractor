@@ -1,4 +1,4 @@
-from extractText import extract_text, extract_text_from_image
+from old.extractText import extract_text, extract_text_from_image
 from parse import parse_text
 
 
