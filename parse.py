@@ -1,34 +1,50 @@
 import re
+from itertools import filterfalse
 
-# date_pattern = r'\d{2}/\d{2}/\d{2}'
-# account_pattern = r'\d{3}-\d{4}-\d{3}'
-# kwh_used_pattern = r'\d+'
-# kwh_per_day_pattern = r'\d+(?:\.\d+)?'
-
-# pattern dictionary
-patterns = {
-    'Billing Date': r'\d{2}/\d{2}/\d{2}',
-
-    # 'Customer Number': r'\d{3}-\d{4}-\d{3}',
-    # 'kWh Month': r'kWh Used\s*(\d+)',
-    # 'kWh Day': r'Cost per Day \$([\d.]+)'
-
-    # 'Days on Bill':
-    # 'Billing Date':
-    # 'Service End Date':
-    # 'Service Start Date':
+#**************************** pattern dictionary *****************************
+# extract numerical values ONLY 
+patterns1 = {
+    'Customer Number': r'\d{3}-\d{4}-\d{3}',
+    'kWh Month': r'kWh Used\s*([\d,]+)',
+    'Cost per Day': r'Cost per Day\s*[^0-9]*([\d.]+)',
+    'Days on Bill': r'Days on Bill\s*\d{2}',
 }
 
-def parse_text(text):
-    data = {}
+# extract date values ONLY
+patterns2 = {
+    'Billing Date': r'Billing Date:\*s\d{2}/\d{2}/\d{2}',
+    'Service Start Date':r'Billing Period\s*([\D]{3}\s*\d{2},\s*\d{4})', # need match.group(1)
+    'Service End Date':r'-\s*([\D]{3}\s*\d{2},\s*\d{4})' # need match.group(1)
+}
+#*****************************************************************************
 
-    for key, pattern in patterns.items():
-        match = re.search(pattern, text)
+def parse_text(text, page_index):
 
-        if match:
-            data[key] = match # match.group(1) returns text that matched first capturing group
-        else: 
-            data[key] = None
-    print(data)
-    return data
+    data1 = {}
+    data2 = {}
+
+    if page_index == 0:
+        for key, pattern in patterns1.items():
+            reMatch = re.search(pattern, text) 
+
+            if reMatch:
+                match = reMatch.group(0) # entire ------> .group(1) is the first capture/group
+                data1[key] = ''.join(filterfalse(str.isalpha, match))
+            else: 
+                data1[key] = None
+        print(data1)
+    elif page_index == 1:
+        for key, pattern in patterns2.items():
+            reMatch = re.search(pattern, text)
+
+            if reMatch:
+                match = reMatch.group(1)
+                data2[key] = match
+            else:
+                data2[key] = None
+        print(data2)
+
+    print(data2.update(data1))
+    return (data2.update(data1))
+
 
