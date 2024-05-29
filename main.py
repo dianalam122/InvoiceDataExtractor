@@ -7,12 +7,13 @@ sample_pdf = 'invoices/real.pdf'
 
 pages = convert_from_path(sample_pdf, first_page=1, last_page=2)
 
+
 for i, page in enumerate(pages):
     page_image = f'page{i + 1}.jpg'
     pages[i].save(page_image, 'JPEG')
     parse_text(process_image(page_image), i)
     os.remove(page_image)
-
+    
 
 
 # other info:

@@ -41,7 +41,7 @@ def process_image(image_path):
     df.drop(columns=['bbox'], inplace=True)
     text = '\n\n'.join(df['text'].tolist())
 
-    print(text)
+    # print(text)
     return text
 
     # need to regex invoice number !!!
