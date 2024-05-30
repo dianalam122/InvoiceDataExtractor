@@ -1,15 +1,14 @@
 import re
-from itertools import filterfalse
+# from itertools import filterfalse
 
 #**************************** pattern dictionary *****************************
 # extract numerical values ONLY 
 patterns1 = {
-    'Customer Number': r'\d{3}-\d{4}-\d{3}',
+    'Customer Number': r'(\d{3}-\d{4}-\d{3})',
     'kWh Month': r'kWh Used\s*([\d,]+)',
     'Cost per Day': r'Cost per Day\s*[^0-9]*([\d.]+)',
-    'Days on Bill': r'Days on Bill\s*\d{2}',
-
-    # 'Billing Date': r'Billing Date:\*s\d{2}/\d{2}/\d{2}'
+    'Days on Bill': r'Days on Bill\s*(\d{2})',
+    'Billing Date': r'Billing Date:\s*(\d{2}/\d{2}/\d{2})'
 }
 
 # extract date values ONLY
@@ -29,8 +28,9 @@ def parse_text(text, page_index):
             reMatch = re.search(pattern, text) 
 
             if reMatch:
-                match = reMatch.group(0) # entire ------> .group(1) is the first capture/group
-                data1[key] = ''.join(filterfalse(str.isalpha, match))
+                match = reMatch.group(1) 
+                # data1[key] = ''.join(filterfalse(str.isalpha, match))
+                data1[key] = match
             else: 
                 data1[key] = None
         print(data1)
@@ -50,7 +50,7 @@ def parse_text(text, page_index):
         print(data2)
         return data2
 
-file_path = 'outputs/output_second_page'
+file_path = 'outputs/output_real.txt'
 
 try: 
     with open(file_path, 'r') as file:
@@ -58,8 +58,8 @@ try:
 except FileNotFoundError:
     print(f'{file_path} could not be opened')
 
-print(file_content)
-parse_text(file_content, 1)
+# 
+parse_text(file_content, 0)
 
 
 # def merge_data(data1, data2):

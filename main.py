@@ -4,15 +4,24 @@ from pdf2image import convert_from_path
 import os
 
 sample_pdf = 'invoices/real.pdf'
-
 pages = convert_from_path(sample_pdf, first_page=1, last_page=2)
 
-
 for i, page in enumerate(pages):
+    merged_data = {}
     page_image = f'page{i + 1}.jpg'
     pages[i].save(page_image, 'JPEG')
-    parse_text(process_image(page_image), i)
+
+    parsed_data = parse_text(process_image(page_image), i)
+    print(parsed_data)
+    merged_data.update(parsed_data)
     os.remove(page_image)
+
+print(merged_data)
+
+    
+    
+
+    
     
 
 
