@@ -17,7 +17,7 @@ def convert_date(date):
             return "Invalid date format"
 
 def convert_num(num):
-    standard_num = ''.join(filter(str.isdigit, str(num)))
+    standard_num = ''.join(filter(lambda x: x.isdigit() or x == '.', str(num)))
     return standard_num
 
 def need_convert(key, value):

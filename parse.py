@@ -21,11 +21,12 @@ def parse_text(text):
         reMatch = re.search(pattern, text)
         if reMatch:
             match = reMatch.group(1)
+            # standard formatting 
             value = need_convert(key, match)
             data[key] = value
         else:
             data[key] = None
-    print(data)
+    return data
 
 
 
