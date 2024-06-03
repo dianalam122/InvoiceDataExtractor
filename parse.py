@@ -1,5 +1,5 @@
 import re
-from format import convert
+from format import need_convert
 
 #**************************** pattern dictionary *****************************
 # extract numerical values ONLY 
@@ -21,17 +21,11 @@ def parse_text(text):
         reMatch = re.search(pattern, text)
         if reMatch:
             match = reMatch.group(1)
-            convert(key, match)
-            data[key] = match
+            value = need_convert(key, match)
+            data[key] = value
         else:
-            match = None
-            data[key] = match
+            data[key] = None
     print(data)
-
-
-
-
-
 
 
 

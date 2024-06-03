@@ -1,15 +1,27 @@
 import datetime
 
-def need_convert(key, value):
-    if key in ['Customer Number', 'Service Start Date', 'Service End Date']
-
-
-
 def convert_date(date):
-    format = '%B %d %Y'
     standard_format = '%m/%d/%y'
-    standard_date = datetime.datetime.strptime(date, format).strftime(standard_format)
-    print(standard_date)
+    try:
+        # Check if the date is already in standard format
+        datetime.datetime.strptime(str(date), standard_format)
+        return date
+    except ValueError:
+        # If date is not in standard format, convert it
+        input_format = '%b %d, %Y'
+        try:
+            standard_date = datetime.datetime.strptime(date, input_format).strftime(standard_format)
+            return standard_date
+        except ValueError:
+            # Handle cases where date format is not as expected
+            return "Invalid date format"
 
-date = 'April 13 2024'
-convert_date(date)
+def convert_num(num):
+    standard_num = ''.join(filter(str.isdigit, str(num)))
+    return standard_num
+
+def need_convert(key, value):
+    if "Date" in key:
+        return convert_date(value)
+    else:
+        return convert_num(value)

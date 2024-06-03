@@ -24,4 +24,3 @@ parse_text(text)
 #  - request access to python
 #  - period start - end dates
 #  - formatting? what info need? 
-#  - 
