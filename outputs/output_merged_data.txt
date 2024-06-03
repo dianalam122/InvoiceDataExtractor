@@ -1,2 +1,0 @@
-{'Customer Number': '300-5102-932', 'kWh Month': 'kWh Used 1,783', 'Cost per Day': 'Cost per Day S6.42', 'Days on Bill': 'Days on Bill 32', 'Billing Date': 'Billing Date: 05/15/24'}
-{'Service Start Date': 'Apr 12, 2024', 'Service End Date': 'May 13, 2024'}
