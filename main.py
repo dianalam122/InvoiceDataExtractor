@@ -1,10 +1,11 @@
-from text_extract import sort_text
-from parse import parse_text
+import os
 import pandas as pd
-import xlsxwriter
 from flask import Flask, render_template, request
+from file_to_excel import get_df, make_excel
 
 app = Flask(__name__)
+UPLOAD_FOLDER = r'C:\Users\dlam01\OneDrive - FGF Brands Inc\Desktop\projects\InvoiceDataExtractor\uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def main():
@@ -14,67 +15,36 @@ def main():
 def upload():
     if request.method == 'POST':
         # Gets the list of files from webpage
-        file_list = request.files.getlist("file")
-
-        # Iterate for reach file in list
-        for file in file_list:
-            file.save(file.filename)
+        for uploaded_file in request.files.getlist('file'):
+            if uploaded_file.filename != '':
+                uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename))
+        convert_files_to_excel()    
         return "Files uploaded Sucessfully!"
+    return render_template('index.html')
+
+
+def convert_files_to_excel():
+    # Convert file in uploads to excel
+    acc_df = pd.DataFrame()
+
+    for file in os.listdir(UPLOAD_FOLDER):
+        file_path = os.path.join(UPLOAD_FOLDER, file)
+        df = get_df(file_path)
+        acc_df = pd.concat([acc_df, df], ignore_index=True)
+    # Make excel
+    make_excel(acc_df)
+
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
-    app.run(debug = True)
+    app.run(debug=True)
 
 
-
-# pdf_file = r'C:\Users\dlam01\OneDrive - FGF Brands Inc\Desktop\projects\InvoiceDataExtractor\invoices\example.pdf'
-
-# # Extracts text from pdf horizontally
-# text = sort_text(pdf_file)
-
-# # Returns dict -> df 
-# invoice_dict = parse_text(text)
-# invoice_df = pd.DataFrame([invoice_dict])
-
-
-
-# # Create a Pandas Excel writer
-# file_name = 'example.xlsx'
-# writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-# # Convert to Excel object
-# invoice_df.to_excel(writer, sheet_name='Sheet1', index=False, startrow=1, header=False)
-# # Get the xlsxwriter workbook and worksheet objects.
-# workbook = writer.book
-# worksheet = writer.sheets['Sheet1']
-
-# # Header format
-# header_format = workbook.add_format(
-#     {
-#         'bold': True,
-#         'text_wrap': True,
-#         'valign': "top",
-#         'border': 1,
-#     }
-# )
-
-# for col_num, value in enumerate(invoice_df.columns.values):
-#     worksheet.write(0, col_num, value, header_format)
-
-# writer.close()
-
-
-
-
-
-
-
-
-
-
+# --()--()--()--()--()--()--()--()--()--()--()--()--()--
 
 # other info:
 #     period:
 #     vendor account: user input cannot extract from image
 #     service period (service end - service start + 1)
 #         make note if different than "days on bill"
+
+# --()--()--()--()--()--()--()--()--()--()--()--()--()--
