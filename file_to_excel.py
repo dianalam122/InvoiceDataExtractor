@@ -2,6 +2,7 @@ from text_extract import sort_text
 from parse import parse_text
 import pandas as pd
 import xlsxwriter
+from io import BytesIO
 
 def get_df(pdf_file):
     # Extracts text from pdf horizontally
@@ -18,6 +19,8 @@ def make_excel(df):
     # Create a Pandas Excel writer
     file_name = 'example.xlsx'
     writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+    output = BytesIO()
+
     # Convert to Excel object
     df.to_excel(writer, sheet_name='Sheet1', index=False, startrow=1, header=False)
     # Get the xlsxwriter workbook and worksheet objects.
@@ -38,6 +41,8 @@ def make_excel(df):
         worksheet.write(0, col_num, value, header_format)
 
     writer.close()
+    output.seek(0)
+    return output.getvalue()
 
 
 

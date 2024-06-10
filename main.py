@@ -2,10 +2,15 @@ import os
 import pandas as pd
 from flask import Flask, render_template, request
 from file_to_excel import get_df, make_excel
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-UPLOAD_FOLDER = r'C:\Users\dlam01\OneDrive - FGF Brands Inc\Desktop\projects\InvoiceDataExtractor\uploads'
+
+DEFAULT_UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join(app.root_path, DEFAULT_UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/')
 def main():
@@ -38,13 +43,3 @@ def convert_files_to_excel():
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-# --()--()--()--()--()--()--()--()--()--()--()--()--()--
-
-# other info:
-#     period:
-#     vendor account: user input cannot extract from image
-#     service period (service end - service start + 1)
-#         make note if different than "days on bill"
-
-# --()--()--()--()--()--()--()--()--()--()--()--()--()--
