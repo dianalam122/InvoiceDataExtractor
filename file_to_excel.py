@@ -3,6 +3,8 @@ from parse import parse_text
 import pandas as pd
 import xlsxwriter
 from io import BytesIO
+import os
+from flask import send_file
 
 def get_df(pdf_file):
     # Extracts text from pdf horizontally
@@ -17,32 +19,34 @@ def get_df(pdf_file):
 
 def make_excel(df):
     # Create a Pandas Excel writer
-    file_name = 'example.xlsx'
-    writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
     output = BytesIO()
 
-    # Convert to Excel object
-    df.to_excel(writer, sheet_name='Sheet1', index=False, startrow=1, header=False)
-    # Get the xlsxwriter workbook and worksheet objects.
-    workbook = writer.book
-    worksheet = writer.sheets['Sheet1']
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
 
-    # Header format
-    header_format = workbook.add_format(
-        {
-            'bold': True,
-            'text_wrap': True,
-            'valign': "top",
-            'border': 1,
-        }
-    )
+        # Convert to Excel object
+        df.to_excel(writer, sheet_name='Sheet1', index=False, startrow=1, header=False)
+        # Get the xlsxwriter workbook and worksheet objects.
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
 
-    for col_num, value in enumerate(df.columns.values):
-        worksheet.write(0, col_num, value, header_format)
+        # Header format
+        header_format = workbook.add_format(
+            {
+                'bold': True,
+                'text_wrap': True,
+                'valign': "top",
+                'border': 1,
+            }
+        )
 
-    writer.close()
-    output.seek(0)
+        for col_num, value in enumerate(df.columns.values):
+            worksheet.write(0, col_num, value, header_format)
+
+        writer.close()
+        output.seek(0)
     return output.getvalue()
+
+
 
 
 

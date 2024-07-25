@@ -42,8 +42,15 @@ def convert_date(date):
             # Handle cases where date format is not as expected
             return "Invalid date format"
 
-def convert_num(num):
-    standard_num = ''.join(filter(lambda x: x.isdigit() or x == '.', str(num)))
+# def convert_reference(num):
+#     return num
+
+
+def convert_num(num, key):
+    if "Updated Reference" in key:
+        standard_num = ''.join(filter(lambda x: x.isdigit() or x == '.', str(num)))
+    else:
+        standard_num = ''.join(filter(lambda x: x.isdigit() or x == '.' or x == '-', str(num)))
     return standard_num
 
  
@@ -56,5 +63,7 @@ def need_convert(key, value):
         return convert_period(value)
     elif "Unit" in key:
         return value
+    # elif "Invoice/Reference#" in key:
+    #     return convert_reference(value)
     else:
-        return convert_num(value)
+        return convert_num(value, key)
