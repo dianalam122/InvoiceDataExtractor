@@ -32,7 +32,7 @@ def upload():
 
         return send_file(
             BytesIO(excel_data),
-            download_name = 'invoices.xlsx',
+            download_name = 'extracted_data.xlsx',
             as_attachment = True,
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )

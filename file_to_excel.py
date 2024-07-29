@@ -1,19 +1,28 @@
 from text_extract import sort_text
 from parse import parse_text
 import pandas as pd
-import xlsxwriter
 from io import BytesIO
-import os
-from flask import send_file
+
+# ***************************** Column Order **********************************************
+columns_order = [
+    'Location', 'Updated Reference', 'Invoice/Reference#', 'Units used per Month', 'Unit',
+    'Cost per Day', 'Days on Bill', 'Calculated total account balance', 'Total Account Balance',
+    'Total Additional Products & Services', 'Previous Bill', 'Total Current Energy Charge',
+    'City Services', 'Taxes', 'Late Charges', 'Billing Date', 'Period', 'Service Start Date',
+    'Service End Date'
+]
+# *****************************************************************************************
+
 
 def get_df(pdf_file):
     # Extracts text from pdf horizontally
     text = sort_text(pdf_file)
 
-    # Returns dict -> df 
+    # dict -> df 
     invoice_dict = parse_text(text)
     invoice_df = pd.DataFrame([invoice_dict])
-
+    
+    invoice_df = invoice_df[columns_order]
     return invoice_df
 
 
