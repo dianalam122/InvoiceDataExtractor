@@ -2,6 +2,7 @@ from text_extract import sort_text
 from parse import parse_text
 import pandas as pd
 from io import BytesIO
+import os
 
 # ***************************** Column Order **********************************************
 columns_order = [
@@ -13,7 +14,6 @@ columns_order = [
 ]
 # *****************************************************************************************
 
-
 def get_df(pdf_file):
     # Extracts text from pdf horizontally
     text = sort_text(pdf_file)
@@ -23,10 +23,11 @@ def get_df(pdf_file):
     invoice_df = pd.DataFrame([invoice_dict])
     
     invoice_df = invoice_df[columns_order]
+
     return invoice_df
 
 
-def make_excel(df):
+def write_to_excel(df):
     # Create a Pandas Excel writer
     output = BytesIO()
 
@@ -51,13 +52,27 @@ def make_excel(df):
         for col_num, value in enumerate(df.columns.values):
             worksheet.write(0, col_num, value, header_format)
 
-        writer.close()
+        # writer.close()
         output.seek(0)
+
     return output.getvalue()
 
 
+def pdfs_to_acc_df(folder):
+    # list of pdfs -> acc df
+    acc_df = pd.DataFrame()
+
+    for file in os.listdir(folder):
+        file_path = os.path.join(folder, file)
+        df = get_df(file_path)
+        acc_df = pd.concat([acc_df, df], ignore_index=True)
+
+    return acc_df
 
 
+def make_excel(upload_folder):
+    acc_df = pdfs_to_acc_df(upload_folder)
+    return write_to_excel(acc_df)
 
 
 

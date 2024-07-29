@@ -13,7 +13,7 @@ patterns = {
     'Total Account Balance': r'Total Account Balance\s*[^0-9]*([\d.,]+)',
     'Total Additional Products & Services': r'Total Additional Products & Services\s*[^0-9]*([\d.,]+)',
     'Previous Bill': r'Previous Bill\s*(-?\$[\d.,]+)',
-    'Total Current Energy Charge': r'(?:Total Current Energy Charge|Total Additional Products & Services)\s*[^0-9]*([\d.,]+)',
+    'Total Current Energy Charge': r'Total Current Energy Charge\s*[^0-9]*([\d.,]+)',
     'City Services': r'City Services\s*[^0-9]*([\d.]+)',
     'Taxes': r'State & Local Sales Taxes\s*[^0-9]*([\d.,]+)',
     'Late Charges':r'Late Charge \d{2}/\d{2}/\d{2}\s*(-?\$[\d.,]+)',
@@ -30,6 +30,7 @@ def parse_text(text):
     calculated_total_components = {
         'Previous Bill': 0.0,
         'Total Current Energy Charge': 0.0,
+        'Total Additional Products & Services': 0.0,
         'City Services': 0.0,
         'Late Charges': 0.0,
         'Taxes': 0.0
