@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, request
 from file_to_excel import make_excel
-
+from flask import send_file
+from io import BytesIO
 
 app = Flask(__name__, static_folder='InvoiceDataExtractor/output')
 
@@ -23,11 +24,9 @@ def upload():
         for uploaded_file in request.files.getlist('file'):
             if uploaded_file.filename != '':
                 uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename))
-        
-        return make_excel(app.config['UPLOAD_FOLDER'], action, ROOT)
 
+        return make_excel(app.config['UPLOAD_FOLDER'], action, ROOT, UPLOAD_FOLDER)
     return render_template('index.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
