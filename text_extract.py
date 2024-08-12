@@ -2,7 +2,6 @@ import fitz
 import pandas as pd
 
 # Extract text from PDF in horizontal order
-
 def sort_text(file):
     words = []
     pdf_doc = fitz.open(file)
@@ -25,7 +24,6 @@ def sort_text(file):
     sorted_df = df.groupby('y0').apply(lambda x:x.sort_values('x0')).reset_index(drop=True)
     sorted_text = sorted_df.groupby('y0')['word'].apply(lambda x:' '.join(x)).values
     text = '\n'.join(sorted_text)
-    
-    return text
 
+    return text
 

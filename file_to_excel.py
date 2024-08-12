@@ -3,6 +3,8 @@ from parse import parse_text
 import pandas as pd
 from io import BytesIO
 import os
+# from openpyxl import load_workbook
+from flask import send_file
 
 # ***************************** Column Order **********************************************
 columns_order = [
@@ -14,6 +16,8 @@ columns_order = [
 ]
 # *****************************************************************************************
 
+
+# gets df from singular pdf file
 def get_df(pdf_file):
     # Extracts text from pdf horizontally
     text = sort_text(pdf_file)
@@ -26,11 +30,10 @@ def get_df(pdf_file):
 
     return invoice_df
 
-
-def write_to_excel(df):
-    # Create a Pandas Excel writer
+def write_to_excel(df, action, ROOT, upload_folder):
+    
     output = BytesIO()
-
+    # Create a Pandas Excel writer
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
 
         # Convert to Excel object
@@ -54,8 +57,27 @@ def write_to_excel(df):
 
         # writer.close()
         output.seek(0)
+        
+    if action == 'append':
+        # append df to root
+        root_df = pd.read_excel(ROOT)
+        combined_df_list = [root_df, df]
+        combined_df = pd.concat(combined_df_list)
 
-    return output.getvalue()
+        # Write the combined data back to the root file
+        with pd.ExcelWriter(ROOT, engine='xlsxwriter') as writer:
+            combined_df.to_excel(writer, sheet_name='Sheet1', index=False)
+    else:
+        # write the new data to a new file
+        excel = output.getvalue()
+
+        return send_file(
+            BytesIO(excel),
+            download_name = 'extracted_data.xlsx',
+            as_attachment = True,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )    
+    clear_upload_folder(upload_folder)
 
 
 def pdfs_to_acc_df(folder):
@@ -70,9 +92,9 @@ def pdfs_to_acc_df(folder):
     return acc_df
 
 
-def make_excel(upload_folder):
+def make_excel(upload_folder, action, ROOT):
     acc_df = pdfs_to_acc_df(upload_folder)
-    return write_to_excel(acc_df)
+    return write_to_excel(acc_df, action, ROOT, upload_folder)
 
 
 

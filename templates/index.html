@@ -4,12 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload</title>
+    <script>
+        function toggleRootUpload() {
+            var appendOption = document.getElementById('append');
+            var rootUpload = document.getElementById('root-upload');
+            if (appendOption.checked) {
+                rootUpload.style.display = 'block';
+            } else {
+                rootUpload.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body>
-    <form action = "/upload" method = "POST" enctype="multipart/form-data">
-        <input type="file" name="file" accept=".pdf" multiple>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label>
+            <input type="radio" name="action" value="new" required onclick="toggleRootUpload()">
+            Create a new Excel file
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="action" value="append" id="append" required onclick="toggleRootUpload()">
+            Append to existing Excel file
+        </label>
+        <br><br>
+        <div id="root-upload" style="display:none;">
+            <label for="root-file">Upload existing Excel file:</label>
+            <input type="file" name="root-file" accept=".xlsx">
+            <br><br>
+        </div>
+        <label for="file">
+            Upload Invoice PDFs:</label>
+        <input type="file" name="file" accept=".pdf" multiple required>
+        <br><br>
         <input type="submit" value="Upload">
-
     </form>
 </body>
 </html>

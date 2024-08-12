@@ -1,5 +1,6 @@
 import re
 from format import need_convert
+# from text_extract import text
 
 #**************************** Pattern Dictionary ****************************************
 patterns = {
@@ -53,7 +54,6 @@ def parse_text(text):
     data['Calculated total account balance'] = calculated_total
 
     return data
-
 
 
 
