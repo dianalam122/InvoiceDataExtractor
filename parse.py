@@ -1,12 +1,12 @@
 import re
 from format import need_convert
-# from text_extract import text
+from text_extract import text
 
 #**************************** Pattern Dictionary ****************************************
 patterns = {
     'Location': r'FGF LLC Customer Number:.*\n(.*)',
     'Updated Reference': r'Customer Number:\s*([^\s]+)',
-    'Invoice/Reference#': r'Customer Number:\s*([^\s]+)',
+    'Invoice/Reference #': r'Customer Number:\s*([^\s]+)',
     'Units used per Month': r'[^0-9\s]+\s*Used\s*([\d,]+)',
     'Unit': r'([^0-9\s]+)\s*Used',
     'Cost per Day': r'Cost per Day\s*[^0-9]*([\d.]+)',
@@ -14,9 +14,10 @@ patterns = {
     'Total Account Balance': r'Total Account Balance\s*[^0-9]*([\d.,]+)',
     'Total Additional Products & Services': r'Total Additional Products & Services\s*[^0-9]*([\d.,]+)',
     'Previous Bill': r'Previous Bill\s*(-?\$[\d.,]+)',
+    'Payments/Adjustments': r'Payments/Adjustments.*?(-?\$[\d.,]+)',
     'Total Current Energy Charge': r'Total Current Energy Charge\s*[^0-9]*([\d.,]+)',
     'City Services': r'City Services\s*[^0-9]*([\d.]+)',
-    'Taxes': r'State & Local Sales Taxes\s*[^0-9]*([\d.,]+)',
+    'State & Local Sales Taxes': r'State & Local Sales Taxes\s*[^0-9]*([\d.,]+)',
     'Late Charges':r'Late Charge \d{2}/\d{2}/\d{2}\s*(-?\$[\d.,]+)',
     'Billing Date': r'Billing Date:\s*(\d{2}/\d{2}/\d{2})',
     'Period': r'Billing Date:\s*(\d{2}/\d{2}/\d{2})',
@@ -29,12 +30,13 @@ def parse_text(text):
     data = {}
     # components of calculated Total Account Balance
     calculated_total_components = {
-        'Previous Bill': 0.0,
         'Total Current Energy Charge': 0.0,
         'Total Additional Products & Services': 0.0,
         'City Services': 0.0,
-        'Late Charges': 0.0,
-        'Taxes': 0.0
+        'Taxes': 0.0,
+        # 'Late Charges': 0.0,
+        'Previous Bill': 0.0,
+        'Payments/Adjustments': 0.0
     }
 
     for key, pattern in patterns.items():
@@ -49,13 +51,11 @@ def parse_text(text):
 
         else:
             data[key] = None
-    # print(data)
-    calculated_total = sum(calculated_total_components.values())
+
+    calculated_total = round(sum(calculated_total_components.values()), 2)
     data['Calculated total account balance'] = calculated_total
-
+    data['Vendor Code'] = 'CPS400'
     return data
-
-
 
 
 
