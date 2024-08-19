@@ -10,7 +10,7 @@ from flask import send_file
 # ***************************** Column Order **********************************************
 columns_order = [
     'Location', 'Vendor Code', 'Updated Reference', 'Invoice/Reference #', 'Units used per Month', 'Unit',
-    'Cost per Day', 'Days on Bill', 'Calculated total account balance', 'Total Account Balance',
+    'Cost per Day', 'Days on Bill', 'Calculated Total Account Balance', 'Total Account Balance',
     'Total Additional Products & Services', 'Previous Bill', 'Total Current Energy Charge',
     'City Services', 'State & Local Sales Taxes', 'Late Charges', 'Billing Date', 'Period', 'Service Start Date',
     'Service End Date'

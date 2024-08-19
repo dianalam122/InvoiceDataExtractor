@@ -25,7 +25,3 @@ def sort_text(file):
     sorted_text = sorted_df.groupby('y0')['word'].apply(lambda x:' '.join(x)).values
     text = '\n'.join(sorted_text)
     return text
-
-pdf = r"C:\Users\dlam01\OneDrive - FGF Brands Inc\Desktop\projects\invoiceExtractor\InvoiceDataExtractor\3000010605 -CPS 300-4198-613-AUG2024.pdf"
-
-text = sort_text(pdf)

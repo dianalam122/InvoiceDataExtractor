@@ -1,6 +1,5 @@
 import re
 from format import need_convert
-from text_extract import text
 
 #**************************** Pattern Dictionary ****************************************
 patterns = {
@@ -33,7 +32,7 @@ def parse_text(text):
         'Total Current Energy Charge': 0.0,
         'Total Additional Products & Services': 0.0,
         'City Services': 0.0,
-        'Taxes': 0.0,
+        'State & Local Sales Taxes': 0.0,
         # 'Late Charges': 0.0,
         'Previous Bill': 0.0,
         'Payments/Adjustments': 0.0
@@ -53,7 +52,7 @@ def parse_text(text):
             data[key] = None
 
     calculated_total = round(sum(calculated_total_components.values()), 2)
-    data['Calculated total account balance'] = calculated_total
+    data['Calculated Total Account Balance'] = calculated_total
     data['Vendor Code'] = 'CPS400'
     return data
 

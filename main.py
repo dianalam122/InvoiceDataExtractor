@@ -1,8 +1,7 @@
 import os
 from flask import Flask, render_template, request
 from file_to_excel import make_excel
-from flask import send_file
-from io import BytesIO
+
 
 app = Flask(__name__, static_folder='InvoiceDataExtractor/output')
 
