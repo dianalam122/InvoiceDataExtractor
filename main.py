@@ -17,7 +17,17 @@ def main():
 @app.route('/upload', methods=['POST'])
 def upload():
     action = request.form['action']
-    ROOT = request.files.get('root-file')
+
+    uploaded_file_root = request.files.get('root-file')
+    if uploaded_file_root:
+        temp_dir = r'InvoiceDataExtractor\temp_dir'
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+    
+    file_path_root = os.path.join(temp_dir, uploaded_file_root.filename)
+    uploaded_file_root.save(file_path_root)
+    ROOT = os.path.abspath(file_path_root  )
+
     if request.method == 'POST':
         # Gets the list of files
         for uploaded_file in request.files.getlist('file'):
